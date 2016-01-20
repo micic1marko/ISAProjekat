@@ -1,0 +1,49 @@
+<html>
+	<head>
+	{% load staticfiles %}
+	
+	<meta charset="utf-8">
+  		<meta name="viewport" content="width=device-width, initial-scale=1">
+  		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	</head>
+	<body>
+	{{invalid}}
+	<br><br><br>
+	
+	 <div class="container" >
+			<form action="{% url 'home' %}" method="post" role="form">{% csrf_token %}
+					<h1>RestauranTrac</h1> 
+					<br>
+			<div class="col-xs-4"  >
+				      <label for="username">Username:</label>
+				      <input type="text" id="username" name="username" class="form-control" placeholder="Enter username" />
+				  
+					
+					
+				      <label for="password">Password:</label>
+				      <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" />
+				    
+					<br>
+					<button type="submit" class="btn btn-info">
+						<span class="glyphicon glyphicon-log-in"></span>
+						Login
+					</button>
+					
+			</form>
+			<br><br>
+			<a href="{% url 'register' %}">Register</a>
+			
+			</div>
+					 </div>
+					 	
+					 <div style='position: relative; left: 770px; bottom:280px;'>
+					 
+						 <img src="{% static "restoran/restaurant.jpg" %}" height="400" width="550" alt="My image"/>
+
+					 
+					 </div>
+	</div>				 
+	</body>
+</html>

@@ -1,0 +1,77 @@
+<html>
+	<head>
+		{% load staticfiles %}
+		
+		{% if not user.user.is_staff %}
+			<meta http-equiv="REFRESH" content="0;url={% url 'restorani' %}">
+		{% endif %}	
+		
+	 	<meta charset="utf-8">
+  		<meta name="viewport" content="width=device-width, initial-scale=1">
+  		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	</head>
+	<body>		
+		
+		<div class="container">
+		
+		<br>
+		  <nav class="navbar navbar-default">
+			  <div class="container-fluid">
+				    <div class="navbar-header">
+				      <a class="navbar-brand" href="#">RestauranTrac</a>
+				    </div>
+				    
+					    <div>
+					      <ul class="nav navbar-nav">
+					        <li><a href="{% url 'home' %}">Home</a></li>
+					        <li class="active"><a href="{% url 'restorani' %}">Restaurants</a></li>
+					        {% if not user.user.is_staff %}
+					        	<li><a href="{% url 'prijatelji' %}">Friends</a></li>
+					        {% endif %} 		        
+					        <li><a href="{% url 'profil' %}">My account <span class="glyphicon glyphicon-user"></span></a></li>
+					        <li><a href="{% url 'logout' %}">Logout</a></li>
+					      </ul>
+					    </div>
+		 	 </div>
+		</nav>
+			
+			{% if user.user.is_staff %}
+			
+			<h2>Menu</h2></br>
+			<a href="{% url 'createjelo' restoran.pk %}" role="button" class="btn btn-success btn-large">
+				<span class="glyphicon glyphicon-plus-sign"></span> Add
+			</a>
+			<table class="table table-hover"> 
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Price</th>
+				<th></th>
+			</thead>
+			    <tbody>
+			      	{% for jelo in restoran.jelovnik.all %}
+						<tr>
+							<td>{{ jelo.naziv }}</td>
+							<td>{{ jelo.opis }}</td>
+							<td>{{ jelo.cena }}</td>
+							<td>
+								<a href="{% url 'updatejelo' jelo.pk %}" role="button" class="btn btn-warning btn-large">
+									<span class="glyphicon glyphicon-wrench"></span> Modify
+								</a>
+								<a href="{% url 'deletejelo' jelo.pk %}" role="button" class="btn btn-danger btn-large">
+									<span class="glyphicon glyphicon-minus-sign"></span> Delete
+								</a>
+							</td>
+						</tr>
+					{% endfor %}
+			    </tbody>
+			 </table>
+	</div>
+	</div>
+	
+	{% endif %}
+	
+	</body>
+</html>

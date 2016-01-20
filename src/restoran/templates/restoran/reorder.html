@@ -1,0 +1,137 @@
+<html>
+	<head>
+		{% load staticfiles %}
+		
+		{% if not user.user.is_staff %}
+			<meta http-equiv="REFRESH" content="0;url={% url 'restorani' %}">
+		{% endif %}
+		
+		
+	 	<meta charset="utf-8">
+  		<meta name="viewport" content="width=device-width, initial-scale=1">
+  		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  		<script src="{% static "restoran/js/actions.js" %}"></script>
+  		
+	</head>
+	<body>
+		
+		<div class="container">
+		<input type="hidden" value="{% url 'fill_data' %}" id="url"/>
+		<input type="hidden" value="{{restoran.pk}}" id="pk"/>
+		<input type="hidden" value="{% url 'update' %}" id="update"/>
+		<input type="hidden" value="{% url 'delete' %}" id="delete_url"/>
+		
+		<br>
+		  <nav class="navbar navbar-default">
+			  <div class="container-fluid">
+				    <div class="navbar-header">
+				      <a class="navbar-brand" href="#">RestauranTrac</a>
+				    </div>
+				    
+					    <div>
+					      <ul class="nav navbar-nav">
+					        <li><a href="{% url 'home' %}">Home</a></li>
+					        <li class="active"><a href="{% url 'restorani' %}">Restaurants</a></li>
+					        {% if not user.user.is_staff %}
+					        	<li><a href="{% url 'prijatelji' %}">Friends</a></li>
+					        {% endif %} 		        
+					        <li><a href="{% url 'profil' %}">My account <span class="glyphicon glyphicon-user"></span></a></li>
+					        <li><a href="{% url 'logout' %}">Logout</a></li>
+					      </ul>
+					    </div>
+		 	 </div>
+		</nav>		
+			
+		<br>
+		
+		
+			<!-- Modal -->
+			<div id="myModal" class="modal fade" role="dialog">
+			  <div class="modal-dialog">
+			
+			    <!-- Modal content-->
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal">&times;</button>
+			        <h4 class="modal-title">Table</h4>
+			      </div>
+			      <div class="modal-body">
+			        <form>
+			        	<label for="restoran_stolice">Number of seats: </label> <input type="text" value="0" id="restoran_stolice" />
+			        	<input type="hidden" value="{{pk}}" id="restoran_key"/>
+			        	<input type="hidden" value="" id="sto_key"/>
+			        	<input type="hidden" value="" id="kolona_key"/>
+			        	<input type="hidden" value="" id="red_key"/>
+			        </form>
+			      </div>
+			      <div class="modal-footer">
+			      	<button type="button" class="btn btn-success" data-dismiss="modal" id="save">Save</button> 
+					<button type="button" class="btn btn-danger" data-dismiss="modal" id="delete_btn">Delete</button> 
+			        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			      </div>
+			    </div>
+			
+			  </div>
+			</div>
+			
+			{% if user.user.is_staff %}
+			
+			<table class="table" id="myTable">
+				<tr>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+				</tr>
+				<tr>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+				</tr>
+				<tr>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+				</tr>
+				<tr>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+				</tr>
+				<tr>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+				</tr>
+			</table>
+			{% endif %}
+		</div>
+		
+	</body>
+</html>

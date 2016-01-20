@@ -1,0 +1,121 @@
+{% load lepdatum from restoran_extras %}
+
+<html>
+	<head>
+		{% load staticfiles %}
+		
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	</head>
+	<body>
+		<div class="container">
+		  <h2></h2>
+		  <nav class="navbar navbar-default">
+		  <div class="container-fluid">
+		    <div class="navbar-header">
+		      <a class="navbar-brand" href="#">RestauranTrac</a>
+		    </div>
+			    <div>
+			      <ul class="nav navbar-nav">
+			        <li class="active"><a href="{% url 'home' %}">Home</a></li>
+			        <li><a href="{% url 'restorani' %}">Restaurants</a></li>
+			        
+			        {% if not user.user.is_staff %}
+						<li><a href="{% url 'prijatelji' %}">Friends</a></li>
+					{% endif %}
+					 		        
+			        <li><a href="{% url 'profil' %}">My account <span class="glyphicon glyphicon-user"></span></a></li>
+			        <li><a href="{% url 'logout' %}">Logout</a></li>
+			      </ul>
+			    </div>
+		  </div>
+		</nav>
+		
+		{% if not user.user.is_staff %}
+			<h3>Visits</h3>
+			<div>
+				<table class="table table-hover"> 
+				<thead>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>					
+				</thead>
+				    <tbody>
+				      	{% for p in posete %}
+							<tr>
+								<td><a href={% url 'poseta' p.pk %}> {{ p.pk }} </a></td>
+								<td><a href="{% url 'profil' %}"> {{ p.rezervacija.korisnik }} </a></td>
+								<td>{{ p.rezervacija.datum|lepdatum }}</td>
+								<td>{{ p.rezervacija.zauzece}}h</td>
+								<td>
+									{% if p.ocena != 0 %}
+										<p>Rate: {{p.ocena}}</p>
+									{% elif p.was_done_recently %}
+										<form action='{% url 'oceni' p.pk %}' method='post'> {% csrf_token %}
+								        	<input type="number" name="ocena" min="1" max="5" value="1">
+								        	<button class="btn btn-info">Rate</button>
+								        </form>
+									{% else %}
+										<p>Reservation in progress</p>
+									{% endif%}
+								</td>
+							</tr>
+						{% endfor %}
+				    </tbody>
+				 </table>
+			</div>
+			
+			<h3>Invites</h3>
+			<div>
+				<table class="table table-hover"> 
+					<thead>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+					</thead>
+				    <tbody>
+						{% for p,ocena in pozvan %}
+							<tr>
+								<td><a href={% url 'poseta' p.pk %}> {{ p.pk }} </a></td>
+								<td>
+									<a href="{% url 'friendprofile' p.rezervacija.korisnik.pk %}">
+										<img src="{% static p.rezervacija.korisnik.picture %}" height="35" width="35" alt="no image" class="img-rounded" />
+									</a>
+								</td>
+								<td><a href="{% url 'friendprofile' p.rezervacija.korisnik.pk %}"> {{ p.rezervacija.korisnik }} </a></td>
+								<td>{{ p.rezervacija.datum|lepdatum }}</td>
+								
+								<td>
+									{% if ocena != 0 %}
+										<p>Rate: {{ocena}}</p>
+									{% elif p.was_done_recently %}
+										<form action='{% url 'ocenipoziv' p.pk %}' method='post'> {% csrf_token %}
+								        	<input type="number" name="ocena" min="1" max="5" value="1">
+								        	<button class="btn btn-info">Rate</button>
+								        </form>
+									{% else %}
+										<p>Reservation in progress</p>
+									{% endif%}
+								</td>
+							</tr>
+						{% endfor %}
+			 		</tbody>
+				 </table>
+			</div>
+			
+			</div>
+		{% else %}
+			<div class="panel panel-primary" >
+  				<div class="panel-heading">You are logged on as a manager.</div>
+ 			 </div>
+		{% endif %}
+		
+	</body>
+</html>

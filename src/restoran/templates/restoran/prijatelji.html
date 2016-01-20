@@ -1,0 +1,93 @@
+<html>
+	<head>
+	
+	{% load staticfiles %}
+	
+		{% if  user.user.is_staff %}
+			<meta http-equiv="REFRESH" content="0;url={% url 'restorani' %}">
+		{% endif %}
+	
+	  	<meta charset="utf-8">
+  		<meta name="viewport" content="width=device-width, initial-scale=1">
+  		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  	</head>
+	<body>
+	
+	<div class="container">
+		  <h2></h2>
+		  <nav class="navbar navbar-default">
+		  <div class="container-fluid">
+		    <div class="navbar-header">
+		      <a class="navbar-brand" href="#">RestauranTrac</a>
+		    </div>
+		    <div>
+		      <ul class="nav navbar-nav">
+		        <li><a href="{% url 'home' %}">Home</a></li>
+		        <li><a href="{% url 'restorani' %}">Restaurants</a></li> 
+		        {% if not user.user.is_staff %}
+		        <li class="active"><a href="{% url 'prijatelji' %}">Friends</a></li> 		
+		        {% endif %}        
+		        <li><a href="{% url 'profil' %}">My account <span class="glyphicon glyphicon-user"></span></a></li>
+		        <li><a href="{% url 'logout' %}">Logout</a></li>
+		      </ul>
+		    </div>
+		  </div>
+		</nav>
+		</div>
+		
+		{% if not user.user.is_staff %}
+		
+		<div class="container">
+			<h1></h1>
+			<form action='{% url 'searchfriends' %}' method='post' class="form-inline"> {% csrf_token %}
+				<input type='text' name='text' class="form-control">
+				<button class="btn btn-default">
+					<span class="glyphicon glyphicon-search"></span> Search
+				</button>
+			</form>
+			
+			<div class="dropdown" style='float:right;'>
+			  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+			  <span class="glyphicon glyphicon-list"></span> Sort friends</button>
+			  <ul class="dropdown-menu dropdown-menu-right">
+			    <li><a class="btn-xs" href="{% url 'prijatelji' %}?sort_by=ascName">First name <span class="glyphicon glyphicon-menu-up"></span></a></li>
+			    <li><a class="btn-xs" href="{% url 'prijatelji' %}?sort_by=descName">First name <span class="glyphicon glyphicon-menu-down"></span></a></li>
+			    <li><a class="btn-xs" href="{% url 'prijatelji' %}?sort_by=ascTip">Last name <span class="glyphicon glyphicon-menu-up"></span></a></li>
+			    <li><a class="btn-xs" href="{% url 'prijatelji' %}?sort_by=descTip">Last name <span class="glyphicon glyphicon-menu-down"></span></a></li>
+			  </ul>
+			</div>
+			
+			<table class="table table-hover">
+			    <thead>
+			      <tr>
+			        <th></th>
+			        <th>Name</th>
+			        <th>Surname</th>
+			        <th>Email</th>
+			        <th></th>
+			      </tr>
+			    </thead>
+			    <tbody>
+			    	{% for j in prijatelji %}
+				      <tr>
+				      	<td>
+				      		<a href="{% url 'friendprofile' j.pk %}">
+				      			<img src="{% static j.picture %}" height="35" width="35" alt="no image" class="img-rounded" />
+				      		</a>
+				      	</td>
+				        <td><a href="{% url 'friendprofile' j.pk %}"> {{ j.user.first_name }} </a></td>
+				        <td><a href="{% url 'friendprofile' j.pk %}"> {{ j.user.last_name }} </a></td>
+				        <td>{{ j.user.email }}</td>
+				        <td><a href={% url 'unfriend' j.pk %} role="button" class="btn btn-danger btn-large">
+				        	<span class="glyphicon glyphicon-remove"></span> Unfriend
+				        </a></td>
+				      </tr>
+			      	{% endfor %}
+			    </tbody>
+			 </table>
+		</div>
+	{% endif %}
+	</body>
+</html>

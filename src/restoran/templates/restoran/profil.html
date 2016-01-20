@@ -1,0 +1,144 @@
+<html>
+	<head>
+		{% load staticfiles %}
+		
+	  	<meta charset="utf-8">
+  		<meta name="viewport" content="width=device-width, initial-scale=1">
+  		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  	</head>
+	  
+	<body>
+	
+	<div class="container">
+		  <h2></h2>
+		  <nav class="navbar navbar-default">
+			  <div class="container-fluid">
+				    <div class="navbar-header">
+				      <a class="navbar-brand" href="#">RestauranTrac</a>
+				    </div>
+				    
+					    <div>
+					      <ul class="nav navbar-nav">
+					        <li><a href="{% url 'home' %}">Home</a></li>
+					        <li><a href="{% url 'restorani' %}">Restaurants</a></li>
+					        
+					        {% if not korisnik.user.is_staff %}
+					        	<li><a href="{% url 'prijatelji' %}">Friends</a></li>
+					        {% endif %}
+					           
+					        <li class="active"><a href="{% url 'profil' %}">My account <span class="glyphicon glyphicon-user"></span></a></li>
+					        <li><a href="{% url 'logout' %}">Logout</a></li>
+					      </ul>
+					    </div>
+		 	 </div>
+		</nav>
+	</div>
+	
+		
+		<div class="container">
+			
+			{% if not korisnik.user.is_staff %}
+				<ul class="list-group">
+				{% for p, s in poseta %}
+					{% if s == 'P' %}
+						<li class="list-group-item">
+							<img src="{% static p.rezervacija.korisnik.picture %}" height="35" width="35" alt="no image" class="img-rounded" />
+							{{p.rezervacija.korisnik.user.first_name}} {{p.rezervacija.korisnik.user.last_name}} invited you to {{p.rezervacija.restoran}}
+							<a href="{% url 'prihvati' p.pk %}" role="button" class="btn btn-success btn-large">
+							<span class="glyphicon glyphicon-ok"></span> Accept</a>
+							
+							<a href="{% url 'odustani' p.pk %}" role="button" class="btn btn-danger btn-large">
+							<span class="glyphicon glyphicon-remove"></span> Decline</a>
+						</li>
+					{% endif %}
+				{% endfor %}
+				</ul>
+			{% endif %}
+		
+			<h1 style="color:blue"><b> {{korisnik.user.username}}</b></h1>
+			<a href="{% url 'imageupload' korisnik.pk %}">
+				<img src="{% static korisnik.picture %}" height="150" width="150" alt="no image" class="img-rounded" />
+			</a>
+			<br><br>
+			
+			<table class="table table-hover">
+			    <tbody>
+			    
+				      <tr>
+				        <b><td><b>Name:</td> <td>{{korisnik.user.first_name}}</td>
+				       </tr>
+				       
+				       <tr>
+						<td><b>Surname:</td> <td>{{korisnik.user.last_name}}</td>
+						</tr>
+						
+						<tr>
+							<td><b>Email:</td> <td>{{korisnik.user.email}}</td>
+						</tr>
+						
+						<tr>
+					        <td>
+					        	<a href={% url 'updateprofil' korisnik.user.pk %} role="button" class="btn btn-warning btn-large">
+					        	<span class="glyphicon glyphicon-wrench"></span> Modify
+					        	</a>
+					        </td>
+					     </tr>
+			    </tbody>
+			 </table>
+			
+			{% if not korisnik.user.is_staff %}
+				<br>
+				<h2>Lista prijatelja<h2>
+				
+				<form action='{% url 'searchfriends' %}' method='post' class="form-inline"> {% csrf_token %}
+					<input type='text' name='text' class="form-control">
+					
+					<button class="btn btn-default">
+						<span class="glyphicon glyphicon-search"></span> Search
+					</button>
+				</form>
+				
+				<div class="dropdown" style='float:right;'>
+				  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+				  <span class="glyphicon glyphicon-list"></span> Sort friends</button>
+				  <ul class="dropdown-menu dropdown-menu-right">
+				    <li><a class="btn-xs" href="{% url 'profil' %}?sort_by=ascName">First name <span class="glyphicon glyphicon-menu-up"></span></a></li>
+				    <li><a class="btn-xs" href="{% url 'profil' %}?sort_by=descName">First name <span class="glyphicon glyphicon-menu-down"></span></a></li>
+				    <li><a class="btn-xs" href="{% url 'profil' %}?sort_by=ascTip">Last name <span class="glyphicon glyphicon-menu-up"></span></a></li>
+				    <li><a class="btn-xs" href="{% url 'profil' %}?sort_by=descTip">Last name <span class="glyphicon glyphicon-menu-down"></span></a></li>
+				  </ul>
+				</div>
+				
+				<table class="table table-hover">
+				    <thead>
+				      <tr>
+				      	<th></th>
+				        <th>Name</th>
+				        <th>Surname</th>
+				        <th>Email</th>
+				        <th></th>
+				      </tr>
+				    </thead>
+				    <tbody>
+				    	{% for j in prijatelji %}
+					      <tr>
+					      	<td>
+					      		<a href="{% url 'friendprofile' j.pk %}"> 
+					      			<img src="{% static j.picture %}" height="35" width="35" alt="no image" class="img-rounded" />
+					      		</a>	
+					      	</td>
+					        <td><a href="{% url 'friendprofile' j.pk %}"> {{ j.user.first_name }} </a></td>
+					        <td><a href="{% url 'friendprofile' j.pk %}"> {{ j.user.last_name }} </a></td>
+					        <td>{{ j.user.email }}</td>
+					        <td><a href={% url 'unfriend' j.pk %} role="button" class="btn btn-danger btn-large">
+					        <span class="glyphicon glyphicon-remove"></span> Unfriend</a></td>
+					      </tr>
+				      	{% endfor %}
+				    </tbody>
+				 </table>
+			</div>
+		{% endif %}
+	</body>
+</html>

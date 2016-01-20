@@ -1,0 +1,80 @@
+{% load isfriend from restoran_extras %}
+
+<html>
+	<head>
+	 	<meta charset="utf-8">
+  		<meta name="viewport" content="width=device-width, initial-scale=1">
+  		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	</head>
+	<body>		
+		
+		<div class="container">
+		
+		<br>
+		  <nav class="navbar navbar-default">
+			  <div class="container-fluid">
+				    <div class="navbar-header">
+				      <a class="navbar-brand" href="#">RestauranTrac</a>
+				    </div>
+				    
+					    <div>
+					      <ul class="nav navbar-nav">
+					        <li><a href="{% url 'home' %}">Home</a></li>
+					        <li class="active"><a href="{% url 'restorani' %}">Restaurants</a></li>
+					        {% if not user.user.is_staff %}
+					        	<li><a href="{% url 'prijatelji' %}">Friends</a></li>
+					        {% endif %} 		        
+					        <li><a href="{% url 'profil' %}">My account <span class="glyphicon glyphicon-user"></span></a></li>
+					        <li><a href="{% url 'logout' %}">Logout</a></li>
+					      </ul>
+					    </div>
+		 	 </div>
+		</nav>
+		
+		<h1> Restaurants </h1>
+	
+	 <div class="dropdown" style='float:right;'>
+	  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+	  <span class="glyphicon glyphicon-list"></span> Sort restaurants</button>
+	  <ul class="dropdown-menu dropdown-menu-right">
+	    <li><a class="btn-xs" href="{% url 'restorani' %}?sort_by=ascName">Name <span class="glyphicon glyphicon-menu-up"></span></a></li>
+	    <li><a class="btn-xs" href="{% url 'restorani' %}?sort_by=descName">Name <span class="glyphicon glyphicon-menu-down"></span></a></li>
+	    <li><a class="btn-xs" href="{% url 'restorani' %}?sort_by=ascTip">Type <span class="glyphicon glyphicon-menu-up"></span></a></li>
+	    <li><a class="btn-xs" href="{% url 'restorani' %}?sort_by=descTip">Type <span class="glyphicon glyphicon-menu-down"></span></a></li>
+	  </ul>
+	</div>
+					
+			<table class="table table-hover"> 
+			<thead>
+				<th>Name</th>
+				<th>Type</th>
+				<th></th>
+			</thead>
+			    <tbody>
+			      	{% for r in obj %}
+						<tr>
+							<td><a href={% url 'restoran' r.pk %}> {{ r.naziv }} </a></td>
+							<td><a href={% url 'tiprestorana' r.tip.pk %}>{{ r.tip.naziv }}</a></td>
+					
+							{% if user.pk not in r.menadzer.all|isfriend %}
+								<td><a href={% url 'rezervacija' r.pk %} role="button" class="btn btn-info btn-large">Reservations</a></td>
+							{% else %}
+								<td><a href="{% url 'izmenarestorana' r.pk %}" role="button" class="btn btn-warning btn-large">
+									<span class="glyphicon glyphicon-wrench"></span> Modify 
+									</a>
+								</td>
+								<td><a href="{% url 'reorder' r.pk %}" role="button" class="btn btn-info btn-warning">
+									<span class="glyphicon glyphicon-wrench"></span> Modify table order
+									</a>
+								</td>
+							{% endif %}
+						</tr>
+					{% endfor %}
+			    </tbody>
+			 </table>
+	</div>
+
+	</body>
+</html>

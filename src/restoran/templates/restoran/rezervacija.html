@@ -1,0 +1,97 @@
+<html>
+	<head>
+		{% load staticfiles %}
+		
+		{% if  user.user.is_staff %}
+			<meta http-equiv="REFRESH" content="0;url={% url 'restorani' %}">
+		{% endif %}
+		
+	  	<meta charset="utf-8">
+  		<meta name="viewport" content="width=device-width, initial-scale=1">
+  		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  		
+  		<script src="{% static "restoran/js/reserve.js" %}"></script>
+  		{{form.media}}
+  	</head>
+	<body>
+	<br>
+	{% if not user.user.is_staff %}
+	
+	<div class="container">
+		<form method="POST" role="form">{% csrf_token%}
+			<table class="table table-hover">
+				{{form.as_table}}
+			</table>
+			<button type="submit" class="btn btn-primary">
+				Make the reservation
+			</button>
+			<br><br>
+			<button type="button" class="btn btn-info" id="check">Check table availability</button>
+			</form>
+			
+			<br> <br>
+			<input type="hidden" value="{{restoran_pk}}" id="restoran_pk"/>
+			<input type="hidden" value="{% url 'check' %}" id="check_url"/>
+			<input type="hidden" value="{% url 'stanje_svih_stolova' %}" id="stanje_svih_stolova"/>
+			
+			
+			<table class="table" id="myTable">
+				<tr>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+				</tr>
+				<tr>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+				</tr>
+				<tr>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+				</tr>
+				<tr>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+				</tr>
+				<tr>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+				</tr>
+			</table>	
+		
+		
+	</div>
+	{% endif %}
+	</body>
+</html>

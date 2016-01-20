@@ -1,0 +1,154 @@
+{% load lepdatum from restoran_extras %}
+
+<html>
+	<head>
+		{% load staticfiles %}
+	
+		{% if  user.user.is_staff %}
+			<meta http-equiv="REFRESH" content="0;url={% url 'restorani' %}">
+		{% endif %}
+	
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		<script src="{% static "restoran/js/visit.js" %}"></script>
+	</head>
+	<body>
+		
+		<input type="hidden" value="{% url 'rezervisani_stolovi' %}" id="rezervisani_stolovi"/>
+		<input type="hidden" value="{{poseta.pk}}" id="poseta_pk"/>
+		
+		<div class="container">
+		
+		<br>
+		  <nav class="navbar navbar-default">
+			  <div class="container-fluid">
+				    <div class="navbar-header">
+				      <a class="navbar-brand" href="#">RestauranTrac</a>
+				    </div>
+				    
+					    <div>
+					      <ul class="nav navbar-nav">
+					        <li><a href="{% url 'home' %}">Home</a></li>
+					        <li class="active"><a href="{% url 'restorani' %}">Restaurants</a></li> 
+					        
+					        {% if not user.user.is_staff %}
+					        	<li><a href="{% url 'prijatelji' %}">Friends</a></li>
+					        {% endif %}
+					         		        
+					        <li><a href="{% url 'profil' %}">My account <span class="glyphicon glyphicon-user"></span></a></li>
+					        <li><a href="{% url 'logout' %}">Logout</a></li>
+					      </ul>
+					    </div>
+		 	 </div>
+		</nav>
+		
+		{% if not user.user.is_staff %}
+		
+		<h1> Information about the reservation </h1>
+					
+			<table class="table table-hover"> 
+			 <thead>
+			      <tr>
+			        <th>User</th>
+			 	   	<th>Date</th>
+			 	   	<th></th>
+			 	   	<th>Restaurant</th>
+			      </tr>
+			    </thead>
+			    <tbody>
+					<tr>
+						<td>{{poseta.rezervacija.korisnik}}</td>
+						<td>{{poseta.rezervacija.datum|lepdatum}}</td>
+						<td>{{poseta.rezervacija.zauzece}}h</td>
+						<td>{{poseta.rezervacija.restoran}}</td>
+					</tr>			  
+				</tbody>
+			 </table>
+			 <br>
+			 
+			 <h2>Attendants</h2>
+			 
+			 <table class="table table-hover">
+			    <thead>
+			      <tr>
+			        <th>Name</th>
+			        <th>Surname</th>
+			        <th>Email</th>
+			        <th>Status</th>
+			      </tr>
+			    </thead>
+			    <tbody>
+			    	{% for j in poseta.zvanice.all %}
+				      <tr>
+				        <td>{{ j.korisnik.user.first_name }}</td>
+				        <td>{{ j.korisnik.user.last_name }}</td>
+				        <td>{{ j.korisnik.user.email }}</td>
+				        <td>{{ j.getstanje }}</td>
+				      </tr>
+			      	{% endfor %}
+			    </tbody>
+			 </table>
+				
+		<br><br>
+		<table class="table" id="myTable">
+				<tr>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+				</tr>
+				<tr>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+				</tr>
+				<tr>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+				</tr>
+				<tr>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+				</tr>
+				<tr>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+					<td><button type="button" class="btn btn-default">x</button></td>
+				</tr>
+			</table>	
+				
+	</div>	
+		
+		
+	{% endif %}	
+	</body>
+</html>
